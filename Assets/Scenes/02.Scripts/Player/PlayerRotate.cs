@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRoate : MonoBehaviour
+public class PlayerRotate : MonoBehaviour
 {
     // 목표 : 마우스를 조작하면 플레이어를 좌우방향으로 회전시키고 싶다.
     // 필요속성:
@@ -18,8 +18,12 @@ public class PlayerRoate : MonoBehaviour
   
     void Update()
     {
+        if (!CameraManager.Focus)
+        {
+            return;
+        }
         //1. 마우스 입력(drag)받는다
-         float mouseX = Input.GetAxis("Mouse X");
+        float mouseX = Input.GetAxis("Mouse X");
         //float mouseY = Input.GetAxis("Mouse Y");
        
 
@@ -31,5 +35,9 @@ public class PlayerRoate : MonoBehaviour
         //3.누적한 값에 따라 회전한다.
         transform.eulerAngles = new Vector3(x: 0f, y:_mx, z: 0);
         //transform.eulerAngles += dir * rotSpeed * Time.deltaTime;
+    }
+    public void ResetX()
+    {
+        _mx = 0;
     }
 }
