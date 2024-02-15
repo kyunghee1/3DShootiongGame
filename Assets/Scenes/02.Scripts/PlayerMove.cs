@@ -8,14 +8,14 @@ public class PlayerMove : MonoBehaviour
     // 목표: 키보드 방향키(wasd)를 누르면 캐릭터를 바라보는 방향 기준으로 이동시키고 싶다. 
     // 속성:
     // - 이동속도
-    public float MoveSpeed = 5;     // 일반 속도
-    public float RunSpeed = 10;    // 뛰는 속도
+    public float MoveSpeed = 7f;     // 일반 속도
+    public float RunSpeed = 10f;    // 뛰는 속도
 
-    public float Stamina = 100;             // 스태미나
+    public float Stamina = 100f;             // 스태미나
     public const float MaxStamina = 100;    // 스태미나 최대량
 
     public float StaminaConsumeSpeed = 33f; // 초당 스태미나 소모량
-    public float StaminaChargeSpeed = 50;  // 초당 스태미나 충전량
+    public float StaminaChargeSpeed = 50f;  // 초당 스태미나 충전량
 
     
 
@@ -43,7 +43,7 @@ public class PlayerMove : MonoBehaviour
     // 목표: 캐릭터에 중력을 적용하고 싶다.
     // 필요 속성:
     // - 중력 값
-    private float _gravity = -20;
+    private float _gravity = -20f;
     // - 누적할 중력 변수: y축 속도
     private float _yVelocity = 0f;
     // 구현 순서:
@@ -91,7 +91,7 @@ public class PlayerMove : MonoBehaviour
 
         // 2. '캐릭터가 바라보는 방향'을 기준으로 방향구하기
         Vector3 dir = new Vector3(h, 0, v);             // 로컬 좌표꼐 (나만의 동서남북) 
-        dir.Normalize();
+        dir.Normalize(); 
         // Transforms direction from local space to world space.
         dir = Camera.main.transform.TransformDirection(dir); // 글로벌 좌표계 (세상의 동서남북)
 

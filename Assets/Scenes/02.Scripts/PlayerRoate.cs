@@ -30,5 +30,6 @@ public class PlayerRoate : MonoBehaviour
 
         //3.누적한 값에 따라 회전한다.
         transform.eulerAngles = new Vector3(x: 0f, y:_mx, z: 0);
+        //transform.eulerAngles += dir * rotSpeed * Time.deltaTime;
     }
 }

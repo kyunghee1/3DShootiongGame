@@ -12,7 +12,7 @@ public class FPSCamera : MonoBehaviour
     // 목표: 마우스를 조작하면 카메라를 그 방향으로 회전시키고 싶다.
     // 필요 속성:
     // - 회전 속도
-    public float RotationSpeed = 200; // 초당 200도까지 회전 가능한 속도
+    public float RotationSpeed = 200f; // 초당 200도까지 회전 가능한 속도
     // 누적할 x각도와 y각도
     private float _mx = 0;
     private float _my = 0;
