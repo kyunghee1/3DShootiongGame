@@ -14,7 +14,7 @@ public class Bomb : MonoBehaviour
 
         gameObject.SetActive(false); // 창고에 넣는다.
         GameObject Effect = Instantiate(BombEffectPrefab);
-        Effect.transform.position = this. transform.position;
+        Effect.transform.position = this.gameObject. transform.position;
 
 
         

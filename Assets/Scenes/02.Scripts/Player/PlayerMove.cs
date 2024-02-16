@@ -8,7 +8,7 @@ public class PlayerMove : MonoBehaviour
     // 목표: 키보드 방향키(wasd)를 누르면 캐릭터를 바라보는 방향 기준으로 이동시키고 싶다. 
     // 속성:
     // - 이동속도
-    public float MoveSpeed = 7f;     // 일반 속도
+    public float MoveSpeed = 5f;     // 일반 속도
     public float RunSpeed = 10f;    // 뛰는 속도
 
     public float Stamina = 100f;             // 스태미나
@@ -37,6 +37,19 @@ public class PlayerMove : MonoBehaviour
     // 구현 순서:
     // 1. 만약에 [Spacebar] 버튼을 누르면..
     // 2. 플레이어에게 y축에 있어 점프 파워를 적용한다
+
+    //목표: 벽에 닿아 있는 상태에서 스페이스바를 누르면 벽타기를 하고 싶다.
+    //필요속성:
+    //-벽타기 파워
+    public float ClimbingPower = 7f;
+    //벽타기 스태미너 소모량 팩터
+    public float ClimbingSatminaCoumeFactor = 1.5f;
+    //-벽타기 상태
+    private bool _isClimbing = false;
+    //구현순서
+    //1. 만약 벽에 닿아 있는데
+    //2. [Spacebar]버튼을 누르고 있으면
+    //3. 벽을 타겠다.
 
 
 
@@ -69,10 +82,28 @@ public class PlayerMove : MonoBehaviour
     // 2. '캐릭터가 바라보는 방향'을 기준으로 방향구하기
     // 3. 이동하기
 
+   
+
     void Update()
     {
-      
-        
+        //구현순서
+        //1. 만약 벽에 닿아 있는데 
+        if (Stamina > 0 && _characterController.collisionFlags == CollisionFlags.Sides)
+        {
+            //2. [Spacebar]버튼을 누르고 있으면
+            if(Input.GetKey(KeyCode.Space))
+            {
+                //3. 벽을 타겠다.
+                _isClimbing = true;
+                _yVelocity = ClimbingPower * StaminaConsumeSpeed;
+
+               
+            }
+
+        }
+
+
+
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             // FPS 카메라 모드로 전환
@@ -97,11 +128,18 @@ public class PlayerMove : MonoBehaviour
 
         // 실습 과제 1. Shift 누르고 있으면 빨리 뛰기
         float speed = MoveSpeed; // 5
-        if (Input.GetKey(KeyCode.LeftShift)) // 실습 과제 2. 스태미너 구현
+
+        if (_isClimbing || Input.GetKey(KeyCode.LeftShift)) // 실습 과제 2. 스태미너 구현
         {
             // - Shfit 누른 동안에는 스태미나가 서서히 소모된다. (3초)
-            Stamina -= StaminaConsumeSpeed * Time.deltaTime; // 초당 33씩 소모
-            if (Stamina > 0)
+
+            // 조건(삼항) 연산자
+            // -> 조건식을 사용해서 조건식의 참, 거짓 여부에 따라 다른 결과값을 대입
+            // 조건식 ? 조건식이 참일때의 값 : 조건식이 거짓일때의 값
+            float factor = _isClimbing ? ClimbingSatminaCoumeFactor : 1f;
+            Stamina -= StaminaConsumeSpeed * factor * Time.deltaTime;
+
+            if (!_isClimbing && Stamina > 0)
             {
                 speed = RunSpeed;
             }
@@ -115,14 +153,15 @@ public class PlayerMove : MonoBehaviour
         Stamina = Mathf.Clamp(Stamina, 0, 100);
         StaminaSliderUI.value = Stamina / MaxStamina;  // 0 ~ 1;//
 
+        // 땅에 닿아을때 
         if (_characterController.isGrounded)
         {
             _isJumping = false;
+            _isClimbing = false;
             _yVelocity = 0f;
-            JumpRemainCount= JumpMaxCount;
+            JumpRemainCount = JumpMaxCount;
         }
-        
-           
+
         // 점프 구현
         // 1. 만약에 [Spacebar] 버튼을 누르는 순간 && 땅이거나 or 점 프 횟수가 남아있다면
         if (Input.GetKeyDown(KeyCode.Space) && (_characterController.isGrounded|| JumpRemainCount >0))

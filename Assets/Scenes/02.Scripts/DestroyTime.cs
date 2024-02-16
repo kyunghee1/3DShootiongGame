@@ -15,7 +15,7 @@ public class DestroyTime : MonoBehaviour
 
     private void Update()
     {
-        _timer = Time.time;
+        _timer += Time.deltaTime;
         if ( _timer >= DeleteTime)
         {
             Destroy(gameObject);
