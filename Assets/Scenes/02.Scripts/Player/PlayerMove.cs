@@ -17,14 +17,25 @@ public class PlayerMove : MonoBehaviour
     public float StaminaConsumeSpeed = 33f; // 초당 스태미나 소모량
     public float StaminaChargeSpeed = 50f;  // 초당 스태미나 충전량
 
-    
+    public int Health;// 플레이어 체력 변수
+    public int maxhealth = 100; //체력 변수
+
+    public Slider healthSliderUI;
+
+    public GameObject hitEffect;
+
+
+
+
+
 
     [Header("스태미나 슬라이더 UI")]
     public Slider StaminaSliderUI;
 
     private CharacterController _characterController;
 
-   
+    public Slider HealthSliderUI;
+
 
     // 목표: 스페이스바를 누르면 캐릭터를 점프하고 싶다.
     // 필요 속성:
@@ -74,7 +85,8 @@ public class PlayerMove : MonoBehaviour
     private void Start()
     {
         Stamina = MaxStamina;
-      
+
+
     }
 
     // 구현 순서
@@ -82,22 +94,30 @@ public class PlayerMove : MonoBehaviour
     // 2. '캐릭터가 바라보는 방향'을 기준으로 방향구하기
     // 3. 이동하기
 
-   
+    public void Hit(int damage)
+    {
+        Health -= damage;
+        if (Health < 0)
+        {
+            Health = 0;
+        }
+    }
 
     void Update()
     {
+
         //구현순서
         //1. 만약 벽에 닿아 있는데 
         if (Stamina > 0 && _characterController.collisionFlags == CollisionFlags.Sides)
         {
             //2. [Spacebar]버튼을 누르고 있으면
-            if(Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space))
             {
                 //3. 벽을 타겠다.
                 _isClimbing = true;
                 _yVelocity = ClimbingPower * StaminaConsumeSpeed;
 
-               
+
             }
 
         }
@@ -122,7 +142,7 @@ public class PlayerMove : MonoBehaviour
 
         // 2. '캐릭터가 바라보는 방향'을 기준으로 방향구하기
         Vector3 dir = new Vector3(h, 0, v);             // 로컬 좌표꼐 (나만의 동서남북) 
-        dir.Normalize(); 
+        dir.Normalize();
         // Transforms direction from local space to world space.
         dir = Camera.main.transform.TransformDirection(dir); // 글로벌 좌표계 (세상의 동서남북)
 
@@ -164,10 +184,10 @@ public class PlayerMove : MonoBehaviour
 
         // 점프 구현
         // 1. 만약에 [Spacebar] 버튼을 누르는 순간 && 땅이거나 or 점 프 횟수가 남아있다면
-        if (Input.GetKeyDown(KeyCode.Space) && (_characterController.isGrounded|| JumpRemainCount >0))
+        if (Input.GetKeyDown(KeyCode.Space) && (_characterController.isGrounded || JumpRemainCount > 0))
         {
             _isJumping = true;
-            
+
 
             JumpRemainCount--;
             // 2. 플레이어에게 y축에 있어 점프 파워를 적용한다.
@@ -177,7 +197,7 @@ public class PlayerMove : MonoBehaviour
 
         // 3-1. 중력 적용
         // 1. 중력 가속도가 누적된다.
-      
+
         _yVelocity += _gravity * Time.deltaTime;
         // 2. 플레이어에게 y축에 있어 중력을 적용한다.
 
@@ -189,5 +209,5 @@ public class PlayerMove : MonoBehaviour
         _characterController.Move(dir * speed * Time.deltaTime);
 
     }
- 
 }
+    
