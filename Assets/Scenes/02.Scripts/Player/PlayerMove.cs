@@ -17,31 +17,22 @@ public class PlayerMove : MonoBehaviour
     public float StaminaConsumeSpeed = 33f; // 초당 스태미나 소모량
     public float StaminaChargeSpeed = 50f;  // 초당 스태미나 충전량
 
-    public int Health;// 플레이어 체력 변수
-    public int maxhealth = 100; //체력 변수
-
-    public Slider healthSliderUI;
-
     public GameObject hitEffect;
 
-
-
-
-
+    [Header("체력 슬라이더 UI")]
+    public int Health;// 플레이어 체력 변수
+    public int maxhealth = 100; //체력 변수
+    public Slider HealthSliderUI;
 
     [Header("스태미나 슬라이더 UI")]
     public Slider StaminaSliderUI;
 
     private CharacterController _characterController;
 
-    public Slider HealthSliderUI;
-
-
     // 목표: 스페이스바를 누르면 캐릭터를 점프하고 싶다.
     // 필요 속성:
     // - 점프 파워 값
     public float JumpPower = 10f;
-
     public int JumpMaxCount = 2;
     public int JumpRemainCount;
     private bool _isJumping = false;
@@ -62,8 +53,6 @@ public class PlayerMove : MonoBehaviour
     //2. [Spacebar]버튼을 누르고 있으면
     //3. 벽을 타겠다.
 
-
-
     // 목표: 캐릭터에 중력을 적용하고 싶다.
     // 필요 속성:
     // - 중력 값
@@ -73,10 +62,6 @@ public class PlayerMove : MonoBehaviour
     // 구현 순서:
     // 1. 중력 가속도가 누적된다.
     // 2. 플레이어에게 y축에 있어 중력을 적용한다.
-
-
-
-
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
@@ -86,7 +71,7 @@ public class PlayerMove : MonoBehaviour
     {
         Stamina = MaxStamina;
 
-
+        Health = maxhealth;
     }
 
     // 구현 순서
@@ -102,7 +87,6 @@ public class PlayerMove : MonoBehaviour
             Health = 0;
         }
     }
-
     void Update()
     {
 
@@ -116,14 +100,8 @@ public class PlayerMove : MonoBehaviour
                 //3. 벽을 타겠다.
                 _isClimbing = true;
                 _yVelocity = ClimbingPower * StaminaConsumeSpeed;
-
-
             }
-
         }
-
-
-
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             // FPS 카메라 모드로 전환
@@ -134,8 +112,6 @@ public class PlayerMove : MonoBehaviour
             // TPS 카메라 모드로 전환
             CameraManager.Instance.SetCameraMode(CameraMode.TPS);
         }
-
-
         // 1. 키 입력 받기
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
@@ -169,10 +145,11 @@ public class PlayerMove : MonoBehaviour
             // - 아니면 스태미나가 소모 되는 속도보다 빠른 속도로 충전된다 (2초)
             Stamina += StaminaChargeSpeed * Time.deltaTime; // 초당 50씩 충전
         }
-
         Stamina = Mathf.Clamp(Stamina, 0, 100);
         StaminaSliderUI.value = Stamina / MaxStamina;  // 0 ~ 1;//
 
+        Health = Mathf.Clamp(Health, 0, 100);
+        HealthSliderUI.value = (float)Health / (float)maxhealth;
         // 땅에 닿아을때 
         if (_characterController.isGrounded)
         {
@@ -181,7 +158,6 @@ public class PlayerMove : MonoBehaviour
             _yVelocity = 0f;
             JumpRemainCount = JumpMaxCount;
         }
-
         // 점프 구현
         // 1. 만약에 [Spacebar] 버튼을 누르는 순간 && 땅이거나 or 점 프 횟수가 남아있다면
         if (Input.GetKeyDown(KeyCode.Space) && (_characterController.isGrounded || JumpRemainCount > 0))
@@ -193,15 +169,11 @@ public class PlayerMove : MonoBehaviour
             // 2. 플레이어에게 y축에 있어 점프 파워를 적용한다.
             _yVelocity = JumpPower;
         }
-
-
         // 3-1. 중력 적용
         // 1. 중력 가속도가 누적된다.
 
         _yVelocity += _gravity * Time.deltaTime;
         // 2. 플레이어에게 y축에 있어 중력을 적용한다.
-
-
         dir.y = _yVelocity;
 
         // 3-2. 이동하기

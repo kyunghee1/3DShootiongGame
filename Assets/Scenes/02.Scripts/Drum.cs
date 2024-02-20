@@ -1,14 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-
-
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
+
+
 
 public class Drum : MonoBehaviour, IHitable
 {
     public int _hitCount = 0;
-
     public GameObject ExplosionParticlePrefabs;
     private Rigidbody _rigidbody;
     public float UpPower = 50f;
@@ -21,21 +20,15 @@ public class Drum : MonoBehaviour, IHitable
     public void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
-      
     }
-    
-    
-    public void Hit (int damage)
+    public void Hit(int damage)
     {
         _hitCount += 1;
-        if (_hitCount >=3)
+        if (_hitCount >= 3)
         {
-
             Explosion();
-
         }
     }
- 
     private void Explosion()
     {
         if (_isExplosion)
@@ -56,17 +49,15 @@ public class Drum : MonoBehaviour, IHitable
         //2. 콜라이더 내에서 Hitable 찾기
         foreach (Collider c in colliders)
         {
-            int i = 0;
+            
             IHitable hitable = null;
-            if (c.TryGetComponent<IHitable>(out hitable) | i < colliders.Length)
+            if (c.TryGetComponent<IHitable>(out hitable))
             {
                 //3. 데미지 주기
                 hitable.Hit(Damage);
-            
             }
-
         }
-        Destroy(gameObject);
+      // 실습과제 23. 
         int environmentLayer = LayerMask.GetMask("Environment");
         Collider[] environmentColliders = Physics.OverlapSphere(transform.position, ExplosionRadius, environmentLayer);
         foreach (Collider c in environmentColliders)

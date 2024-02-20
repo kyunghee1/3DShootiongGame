@@ -36,16 +36,5 @@ public class Gun : MonoBehaviour
 
  
   
-    // Update is called once per frame
-    void Update()
-    {
-        int i = 0;
-        for (;i < guns.Length;i++) 
-        {
-            guns[i] = new GunType();
-
-
-        }
-
-    }
+  
 }
