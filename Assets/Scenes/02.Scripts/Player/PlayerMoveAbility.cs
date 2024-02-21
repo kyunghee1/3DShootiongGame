@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMoveAbility : MonoBehaviour
 {
     // 목표: 키보드 방향키(wasd)를 누르면 캐릭터를 바라보는 방향 기준으로 이동시키고 싶다. 
     // 속성:
@@ -21,7 +21,7 @@ public class PlayerMove : MonoBehaviour
 
     [Header("체력 슬라이더 UI")]
     public int Health;// 플레이어 체력 변수
-    public int maxhealth = 100; //체력 변수
+    public int Maxhealth = 100; //체력 변수
     public Slider HealthSliderUI;
 
     [Header("스태미나 슬라이더 UI")]
@@ -71,7 +71,7 @@ public class PlayerMove : MonoBehaviour
     {
         Stamina = MaxStamina;
 
-        Health = maxhealth;
+        Health = Maxhealth;
     }
 
     // 구현 순서
@@ -149,7 +149,7 @@ public class PlayerMove : MonoBehaviour
         StaminaSliderUI.value = Stamina / MaxStamina;  // 0 ~ 1;//
 
         Health = Mathf.Clamp(Health, 0, 100);
-        HealthSliderUI.value = (float)Health / (float)maxhealth;
+        HealthSliderUI.value = (float)Health / (float)Maxhealth;
         // 땅에 닿아을때 
         if (_characterController.isGrounded)
         {
