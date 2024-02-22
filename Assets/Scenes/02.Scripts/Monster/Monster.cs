@@ -11,11 +11,26 @@ public class Monster : MonoBehaviour, IHitable
 
     public Slider HealthSliderUI;
     // Start is called before the first frame update
+
+
+    private void ItemDrop()
+    {
+        
+     
+        
+    }
+    private void Die()
+    {
+        ItemObjectFactory.Instance.MakePercent(transform.position);
+        Destroy(gameObject);
+    }
+    
     public void Hit(int damage)
     {
         Health -= damage;
        if(Health<0)
         {
+            Die();
            Destroy(gameObject);
         }
     }
