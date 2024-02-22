@@ -7,12 +7,22 @@ public enum ItemType
 {
     Health, //체력이 꽉찬다
     Stamina, //스테미나 꽉찬다
-    Bullet  // 현재 들고 있는 총알이 
+    Bullet, // 현재 들고 있는 총알이 
 }
+public enum ItemState
+{
+    Idle ,
+    Move
+}
+
 public class Item
 {
+    private Transform _target;
+    private ItemState _currentState =ItemState.Idle;
+
     public ItemType ItemType;
     public int Count;
+   
 
     public Item(ItemType itemTypem, int count)
     {
@@ -56,12 +66,30 @@ public class Item
     // Start is called before the first frame update
     void Start()
     {
-        
+        _target = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        switch (_currentState)
+        {
+            case ItemState.Idle:
+                Idle();
+                break;
+            case ItemState.Move:
+                Move();
+                break;
+
+           
+        }
+    }
+    private void Idle()
+    {
+
+    }
+    private void Move()
+    {
+
     }
 }

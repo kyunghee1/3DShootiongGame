@@ -1,8 +1,6 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
-
-
 using UnityEngine;
 using static UnityEditor.Progress;
 
@@ -22,10 +20,11 @@ public class ItemObjectFactory : MonoBehaviour
 {
 
     public static ItemObjectFactory Instance { get; private set; }
-    public List<GameObject> ItemPrefabs;
+  
    
     private int PoolCount = 10; //Ç® Å©±â
     public List<ItemObject> _ItemPool = new List<ItemObject>();
+    public List<GameObject> ItemPrefabs;
 
     private void Awake()
     {
@@ -42,7 +41,6 @@ public class ItemObjectFactory : MonoBehaviour
 
                 item.SetActive(false);
             }
-
         }
 
     }
