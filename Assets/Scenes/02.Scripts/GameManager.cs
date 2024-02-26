@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     // 게임의 상태는 처음에 "준비" 상태
     public GameState State { get; private set; } = GameState.Ready;
 
-    public Text StateTextUI;
+    public Text StateTextMeshProUI;
 
     public Color GoStateColor;
 
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         // 게임 상태
         // 1. 게임 "준비" 상태 (Ready...)
         State = GameState.Ready;
-        StateTextUI.gameObject.SetActive(true);
+        StateTextMeshProUI.gameObject.SetActive(true);
         Refresh();
 
         // 2. 1.6초 후에 게임 "시작" 상태 (Start!)
@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
 
         // 3. 0.4초 후에 텍스트 사라지고...
         yield return new WaitForSeconds(0.4f);
-        StateTextUI.gameObject.SetActive(false);
+        StateTextMeshProUI.gameObject.SetActive(false);
     }
 
     // 4. 플레이를 하다가
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         State = GameState.Over;
-        StateTextUI.gameObject.SetActive(true);
+        StateTextMeshProUI.gameObject.SetActive(true);
         Refresh();
     }
 
@@ -68,22 +68,22 @@ public class GameManager : MonoBehaviour
         {
             case GameState.Ready:
             {
-                StateTextUI.text = "Ready...";
-                StateTextUI.color = new Color32(0, 253, 181, 255);
+                StateTextMeshProUI.text = "Ready...";
+                StateTextMeshProUI.color = new Color32(0, 253, 181, 255);
                 break;
             }
 
             case GameState.Go:
             {
-                StateTextUI.text = "Go!";
-                StateTextUI.color = GoStateColor;
+                StateTextMeshProUI.text = "Go!";
+                StateTextMeshProUI.color = GoStateColor;
                 break;
             }
 
             case GameState.Over:
             {
-                StateTextUI.text = "Game Over";
-                StateTextUI.color = Color.red;
+                StateTextMeshProUI.text = "Game Over";
+                StateTextMeshProUI.color = Color.red;
                 break;
             }
 
