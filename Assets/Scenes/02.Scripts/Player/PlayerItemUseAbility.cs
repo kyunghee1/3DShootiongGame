@@ -21,7 +21,7 @@ public class PlayerItemUseAbility : MonoBehaviour
             {
                 //todo :아이템 효과음 재생
                 //todo: 파티클 시스템 재생
-                ItemManager.Instance.RefreshUI();
+               
             }
             else
             {
@@ -31,13 +31,13 @@ public class PlayerItemUseAbility : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.Y))
         {
             ItemManager.Instance.TryUseItem(ItemType.Stamina);
-            ItemManager.Instance.RefreshUI();
+           
         }
         else if(Input.GetKeyDown(KeyCode.U))
         {
             // 총알 아이템 사용
             ItemManager.Instance.TryUseItem(ItemType.Bullet);
-            ItemManager.Instance.RefreshUI();
+           
         }
     }
 }

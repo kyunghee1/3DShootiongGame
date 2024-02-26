@@ -99,6 +99,7 @@ public class PlayerMoveAbility : MonoBehaviour
         HitEffectImageUI.gameObject.SetActive(true);
         yield return new WaitForSeconds(delay);
         HitEffectImageUI.gameObject.SetActive(false);
+    }
         void Update()
         {
             if (GameManager.Instance.State != GameState.Go)
@@ -204,5 +205,5 @@ public class PlayerMoveAbility : MonoBehaviour
             }
         }
     }
-}
+
     
