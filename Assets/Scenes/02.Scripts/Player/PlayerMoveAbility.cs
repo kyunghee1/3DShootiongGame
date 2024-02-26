@@ -17,9 +17,10 @@ public class PlayerMoveAbility : MonoBehaviour
     public float StaminaConsumeSpeed = 33f; // 초당 스태미나 소모량
     public float StaminaChargeSpeed = 50f;  // 초당 스태미나 충전량
 
-    public GameObject hitEffect;
-
     [Header("체력 슬라이더 UI")]
+    public GameObject HitEffectImageUI;
+
+   
     public int Health;// 플레이어 체력 변수
     public int Maxhealth = 100; //체력 변수
     public Slider HealthSliderUI;
@@ -81,15 +82,26 @@ public class PlayerMoveAbility : MonoBehaviour
 
     public void Hit(int damage)
     {
+        StartCoroutine(HitEffect_Coroutine(0.2f));
+        CameraManager.Instance.CameraShake.Shake();
         Health -= damage;
-        if (Health < 0)
+        if (Health <= 0)
         {
             Health = 0;
         }
     }
     void Update()
     {
+        if (GameManager.Instance.State != GameState.Go)
+        {
+            return;
+        }
+        HealthSliderUI.value = (float)Health / (float)Maxhealth;  // 0 ~ 1
 
+        if(GameManager.Instance.State != GameState.Go)
+        {
+            return;
+        }
         //구현순서
         //1. 만약 벽에 닿아 있는데 
         if (Stamina > 0 && _characterController.collisionFlags == CollisionFlags.Sides)
@@ -180,6 +192,13 @@ public class PlayerMoveAbility : MonoBehaviour
         //transform.position += speed * dir * Time.deltaTime;
         _characterController.Move(dir * speed * Time.deltaTime);
 
+    }
+    private IEnumerator HitEffect_Coroutine(float delay)
+    {
+        // 과제 40. 히트 이펙트 이미지 0.3초동안 보이게 구현
+        HitEffectImageUI.gameObject.SetActive(true);
+        yield return new WaitForSeconds(delay);
+        HitEffectImageUI.gameObject.SetActive(false);
     }
 }
     

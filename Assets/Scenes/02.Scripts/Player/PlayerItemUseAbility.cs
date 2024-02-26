@@ -10,7 +10,11 @@ public class PlayerItemUseAbility : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T))
+        if (GameManager.Instance.State != GameState.Go)
+        {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.T))
         {
            bool result = ItemManager.Instance.TryUseItem(ItemType.Health);
             if(result)

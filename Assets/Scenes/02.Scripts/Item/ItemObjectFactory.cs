@@ -1,8 +1,8 @@
-using JetBrains.Annotations;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
+
+
+
 
 //아이템 공장의 역할 : 아이템 오브젝트의 생성을 책임진다.
 //팩토리 패턴
@@ -44,6 +44,10 @@ public class ItemObjectFactory : MonoBehaviour
         }
 
     }
+    private void Start()
+    {
+        
+    }
     private ItemObject Get(ItemType itemType) //창고 뒤지기
     {
         foreach(ItemObject itemObject in _ItemPool) //창고를 뒤진다
@@ -77,7 +81,8 @@ public class ItemObjectFactory : MonoBehaviour
        ItemObject itemObject = Get(itemType);
         if (itemObject != null)
         {
-            itemObject.transform.position = position;   
+            itemObject.transform.position = position;
+            ///itemObject.Init();
             itemObject.gameObject.SetActive(true);
         }
      }
