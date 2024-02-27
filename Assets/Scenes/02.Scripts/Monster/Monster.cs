@@ -7,13 +7,15 @@ using UnityEngine.AI;
 
 public enum MonsterState // 몬스터의 상태
 {
+    Any,            //어떤 상태라도
     Idle,           // 대기
     Patrol,         // 순찰
     Trace,          // 추적
     Attack,         // 공격
     Comeback,       // 복귀
     Damaged,        // 공격 당함
-    Die             // 사망
+    Die  ,           // 사망
+    
 }
 
 public class Monster : MonoBehaviour, IHitable
@@ -50,7 +52,8 @@ public class Monster : MonoBehaviour, IHitable
     public Transform PatrolTarget;
 
     private MonsterState _currentState = MonsterState.Idle;
-
+    private Animator _animator;
+   
     private void Start()
     {
         //_characterController = GetComponent<CharacterController>();
@@ -61,6 +64,8 @@ public class Monster : MonoBehaviour, IHitable
         _target = GameObject.FindGameObjectWithTag("Player").transform;
 
         StartPosition = transform.position;
+
+        _animator = GetComponentInChildren<Animator>();
 
         Init();
     }
@@ -84,6 +89,8 @@ public class Monster : MonoBehaviour, IHitable
 
         switch (_currentState)
         {
+           
+
             case MonsterState.Idle:
                 Idle();
                 break;
@@ -107,6 +114,12 @@ public class Monster : MonoBehaviour, IHitable
             case MonsterState.Damaged:
                 Damaged();
                 break;
+
+            case MonsterState.Die:
+               Die();
+                break;
+           
+
         }
     }
 
@@ -118,14 +131,17 @@ public class Monster : MonoBehaviour, IHitable
         {
             _idleTimer = 0f;
             Debug.Log("상태 전환: Idle -> Patrol");
+            _animator.SetTrigger("IdleToPatrol");
             _currentState = MonsterState.Patrol;
         }
         // todo: 몬스터의 Idle 애니메이션 재생
         if (Vector3.Distance(_target.position, transform.position) <= FindDistance)
         {
             Debug.Log("상태 전환: Idle -> Trace");
+            _animator.SetTrigger("IdleToTrace");
             _currentState = MonsterState.Trace;
         }
+       
     }
 
     private void Trace()
@@ -148,12 +164,14 @@ public class Monster : MonoBehaviour, IHitable
         if (Vector3.Distance(transform.position, StartPosition) >= MoveDistance)
         {
             Debug.Log("상태 전환: Trace -> Comeback");
+            _animator.SetTrigger("TraceToComeback");
             _currentState = MonsterState.Comeback;
         }
 
         if (Vector3.Distance(_target.position, transform.position) <= AttackDistance)
         {
             Debug.Log("상태 전환: Trace -> Attack");
+            _animator.SetTrigger("TraceToAttack");
             _currentState = MonsterState.Attack;
         }
     }
@@ -165,12 +183,14 @@ public class Monster : MonoBehaviour, IHitable
         if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= TOLERANCE)
         {
             Debug.Log("상태 전환: Patrol -> Comeback");
+            _animator.SetTrigger("PatrolToComeback");
             _currentState = MonsterState.Comeback;
         }
 
         if (Vector3.Distance(_target.position, transform.position) <= FindDistance)
         {
             Debug.Log("상태 전환: Patrol -> Trace");
+            _animator.SetTrigger("PatrolToTrace");
             _currentState = MonsterState.Trace;
         }
 
@@ -195,6 +215,7 @@ public class Monster : MonoBehaviour, IHitable
         if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance >= TOLERANCE)
         {
             Debug.Log("상태 전환: Comeback -> idle");
+            _animator.SetTrigger("ComebackToIdle");
             _currentState = MonsterState.Idle;
         }
         if (Vector3.Distance(StartPosition, transform.position) <= TOLERANCE)
@@ -211,6 +232,7 @@ public class Monster : MonoBehaviour, IHitable
         {
             _attackTimer = 0f;
             Debug.Log("상태 전환: Attack -> Trace");
+            _animator.SetTrigger("AttackToTrace");
             _currentState = MonsterState.Trace;
             return;
         }
@@ -218,17 +240,26 @@ public class Monster : MonoBehaviour, IHitable
         // 실습 과제 35. Attack 상태일 때 N초에 한 번 때리게 딜레이 주기
         _attackTimer += Time.deltaTime;
         if (_attackTimer >= AttackDelay)
-        {
-            IHitable playerHitable = _target.GetComponent<IHitable>();
-            if (playerHitable != null)
-            {
-                Debug.Log("때렸다!");
-                playerHitable.Hit(Damage);
-                _attackTimer = 0f;
-            }
+        { 
+            _animator.SetTrigger("Attack");
+          //  _animator.SetTrigger("Attack");
+          
         }
 
     }
+    public void PlayerAttack()
+    {
+        Debug.Log(_target.name);
+        IHitable playerHitable = _target.GetComponent<IHitable>();
+
+        if (playerHitable != null)
+        {
+            Debug.Log("때렸다!");
+            playerHitable.Hit(Damage);
+            _attackTimer = 0f;
+        }
+    }
+
 
     private void Damaged()
     {
@@ -258,31 +289,62 @@ public class Monster : MonoBehaviour, IHitable
             _knockbackProgress = 0f;
 
             Debug.Log("상태 전환: Damaged -> Trace");
+            _animator.SetTrigger("DamagedToTrace");
             _currentState = MonsterState.Trace;
         }
     }
 
     public void Hit(int damage)
     {
+      
+        if(_currentState == MonsterState.Die)
+        {
+            return;
+        }
         Health -= damage;
         if (Health <= 0)
         {
-            Die();
+            Debug.Log("상태전환: Any -> Die");
+            
+            _animator.SetTrigger($"Die { Random.Range(1, 3)}");
+            _currentState = MonsterState.Die;
+                
         }
         else
         {
             Debug.Log("상태 전환: Any -> Damaged");
+          
             _currentState = MonsterState.Damaged;
         }
     }
-
-    private void Die()
+    IEnumerator Die_Coroutine()
     {
+
+        _navMeshAgent.isStopped = true;
+        _navMeshAgent.ResetPath();
+
+        HealthSliderUI.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(2f);
+
+        Destroy(gameObject);
+
 
         // 죽을때 아이템 생성
         ItemObjectFactory.Instance.MakePercent(transform.position);
 
-        Destroy(gameObject);
+
+    }
+    private Coroutine _dieCoroutine;
+    private void Die()
+    {
+       if(_dieCoroutine == null)
+        {
+            _dieCoroutine = StartCoroutine(Die_Coroutine());
+        }
+        // 죽을때 아이템 생성
+      
+       
     }
 
 

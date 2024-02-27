@@ -83,7 +83,11 @@ public class ItemManager : MonoBehaviour
             if (ItemList[i].ItemType == itemType)
             {
                 bool result = ItemList[i].TryUse();
-             
+                if (OnDataChanged != null)
+                {
+                    OnDataChanged.Invoke();
+                }
+
                 return result;
             }
         }
