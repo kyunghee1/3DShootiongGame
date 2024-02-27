@@ -150,7 +150,7 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
 
         // 2. '캐릭터가 바라보는 방향'을 기준으로 방향구하기
         Vector3 dir = new Vector3(h, 0, v);
-        Vector3 unNormalized = dir;// 로컬 좌표꼐 (나만의 동서남북) 
+        Vector3 unNormalizedDir = dir;// 로컬 좌표꼐 (나만의 동서남북) 
         dir.Normalize();
         // Transforms direction from local space to world space.
         dir = Camera.main.transform.TransformDirection(dir); // 글로벌 좌표계 (세상의 동서남북)
@@ -220,7 +220,7 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
         // 3-2. 이동하기
         //transform.position += speed * dir * Time.deltaTime;
         _characterController.Move(dir * speed * Time.deltaTime);
-        _animator.SetFloat("Move", dir.magnitude);
+        _animator.SetFloat("Move",unNormalizedDir.magnitude);
     }
 
 }
