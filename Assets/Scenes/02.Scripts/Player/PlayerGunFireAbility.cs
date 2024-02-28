@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,13 +45,35 @@ public class PlayerGunFireAbility : MonoBehaviour
    
 
     public Image GunImageUI;
-    
+
+    private Animator _animator;
+
+    public List<GameObject> MuzzleEffects;
+
+   
+
     private void Start()
-    { 
+    {
+        foreach (GameObject muzzleffect in MuzzleEffects) 
+        {
+            muzzleffect.SetActive(false);
+        }
+
+        _animator = GetComponentInChildren<Animator>();
         _currentGunIndex = 0;
         //총알 개수 초기화
         RefreshGun();
         RefreshUI();
+    }
+    private IEnumerator MuzzleEffect_Coroutine()
+    {
+        //총 이펙트 중 하나를 켜준다.
+        int randomIndex = Random.Range(0, MuzzleEffects.Count);
+        MuzzleEffects[randomIndex].SetActive(true);
+        //0.1 초 후
+        yield return new WaitForSeconds(0.1f);
+        //꺼준다
+        MuzzleEffects[randomIndex].SetActive(false);
     }
     public void RefreshUI()
     {
@@ -62,7 +83,8 @@ public class PlayerGunFireAbility : MonoBehaviour
         CrosshairUI.SetActive(!_isZoomMode);
         CrosshairZoomUI.SetActive(_isZoomMode);
     }
-
+    
+   
     private IEnumerator Reload_Coroutine()
     {
         _isReloading = true;
@@ -207,10 +229,16 @@ public class PlayerGunFireAbility : MonoBehaviour
                 StopAllCoroutines();
                 Debug.Log("재장전중 취소");
                 _isReloading = false;
+
             }
+            _animator.SetTrigger("Shot");
             CurrentGun.BulletRemainCount -= 1;
             RefreshUI();
             _timer = 0;
+
+            //총 이펙트 중 하나를 켜준다.
+            //0.1초후..
+            //꺼준다
 
             //2. 레이(광선)을 생성하고, 위치와 방향을 설정한다.
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);

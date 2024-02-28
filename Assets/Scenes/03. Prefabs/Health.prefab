@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8319535420753050854}
   - component: {fileID: 900074005660514417}
   - component: {fileID: 1474137859116969238}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,4 +118,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11c2fcca6bf6713478d2f7a4a040425a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EatDistance: 0.3
   ItemType: 0

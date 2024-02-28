@@ -17,8 +17,18 @@ public class Drum : MonoBehaviour, IHitable
 
     private bool _isExplosion = false;
 
+    public  Texture[] textures; //무작위로 적용할 텍스처 배열 
+    private new MeshRenderer renderer;
+    public float radius = 5f;
+
     public void Start()
     {
+        renderer = GetComponentInChildren<MeshRenderer>();
+        int index= Random.Range(0, textures.Length);
+        renderer.material.mainTexture = textures[index];
+       
+       
+       
         _rigidbody = GetComponent<Rigidbody>();
     }
     public void Hit(int damage)

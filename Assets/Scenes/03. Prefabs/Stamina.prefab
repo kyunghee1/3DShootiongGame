@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1441705126599045530}
   - component: {fileID: 7473467338585906385}
   - component: {fileID: 8598830553580468317}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Stamina
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,4 +118,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11c2fcca6bf6713478d2f7a4a040425a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EatDistance: 0.3
   ItemType: 1
