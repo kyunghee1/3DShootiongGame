@@ -25,13 +25,13 @@ public class Drum : MonoBehaviour, IHitable
     {
         renderer = GetComponentInChildren<MeshRenderer>();
         int index= Random.Range(0, textures.Length);
-        renderer.material.mainTexture = textures[index];
+      // renderer.material.mainTexture = textures[index];
        
        
        
         _rigidbody = GetComponent<Rigidbody>();
     }
-    public void Hit(int damage)
+    public void Hit(DamageInfo damage)
     {
         _hitCount += 1;
         if (_hitCount >= 3)
@@ -63,8 +63,9 @@ public class Drum : MonoBehaviour, IHitable
             IHitable hitable = null;
             if (c.TryGetComponent<IHitable>(out hitable))
             {
+                DamageInfo damageInfo = new DamageInfo(DamageType.Normal, Damage);
                 //3. 데미지 주기
-                hitable.Hit(Damage);
+                hitable.Hit(damageInfo);
             }
         }
       // 실습과제 23. 
