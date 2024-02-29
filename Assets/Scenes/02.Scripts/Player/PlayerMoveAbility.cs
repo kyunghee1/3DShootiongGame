@@ -85,20 +85,20 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
     // 2. '캐릭터가 바라보는 방향'을 기준으로 방향구하기
     // 3. 이동하기
 
-    public void Hit(int damage)
+    public void Hit(DamageInfo damageInfo)
     {
-
-        if(GameManager.Instance.State != GameState.Go)
+        CameraManager.Instance.CameraShake.Shake();
+        if (GameManager.Instance.State != GameState.Go)
         {
             return;
         }
 
         StartCoroutine(HitEffect_Coroutine(0.2f));
-        //CameraManager.Instance.CameraShake.Shake();
-        Health -= damage;
+        CameraManager.Instance.CameraShake.Shake();
+        Health -= damageInfo.Amount;
 
-        _animator.SetLayerWeight(1, 1- Health /(float)Maxhealth);
-
+         RefreshAnimation();
+     
         if (Health <= 0)
         {
             HealthSliderUI.value = 0f;
@@ -106,6 +106,10 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
 
             GameManager.Instance.GameOver();
         }
+    }
+    public void RefreshAnimation()
+    {
+        _animator.SetLayerWeight(1, 1 - Health / (float)Maxhealth);
     }
     private IEnumerator HitEffect_Coroutine(float delay)
     {
@@ -192,7 +196,7 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
         {
             if (_yVelocity < -20)
             {
-                Hit(10 * (int)(_yVelocity / -10f));
+                DamageInfo damageInfo = new DamageInfo(DamageType.Normal, 10 * (int)(_yVelocity / -10f));
             }
             _isJumping = false;
             _isClimbing = false;

@@ -53,6 +53,7 @@ public class Monster : MonoBehaviour, IHitable
 
     private MonsterState _currentState = MonsterState.Idle;
     private Animator _animator;
+    public GameObject BloodPrefab;
    
     private void Start()
     {
@@ -255,7 +256,13 @@ public class Monster : MonoBehaviour, IHitable
         if (playerHitable != null)
         {
             Debug.Log("때렸다!");
-            playerHitable.Hit(Damage);
+            DamageInfo damageInfo = new DamageInfo(DamageType.Normal, Damage);
+            playerHitable.Hit(damageInfo);
+            _attackTimer = 0f;
+
+
+
+
             _attackTimer = 0f;
         }
     }
@@ -294,14 +301,23 @@ public class Monster : MonoBehaviour, IHitable
         }
     }
 
-    public void Hit(int damage)
+    public void Hit(DamageInfo damage)
     {
       
         if(_currentState == MonsterState.Die)
         {
             return;
         }
-        Health -= damage;
+        //Todo.실습과제 47. 데미지 타입이 크리티컬이면 피흘리기
+        //Todo. 데미지 타입이 크리티컬이면 피흘리기
+
+        if(damage.DamageType == DamageType.Critical)
+        {
+            GameObject bloodObject = Instantiate(BloodPrefab);
+            bloodObject.transform.position = damage.Position;
+            bloodObject.transform.forward = damage.Normal;
+        }
+        Health -= damage.Amount;
         if (Health <= 0)
         {
             Debug.Log("상태전환: Any -> Die");
