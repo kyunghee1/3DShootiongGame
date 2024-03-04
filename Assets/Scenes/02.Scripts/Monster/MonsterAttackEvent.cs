@@ -16,6 +16,5 @@ public class MonsterAttackEvent : MonoBehaviour
         Debug.Log("어택 발생");
         _owner.PlayerAttack();
     }
-    // Update is called once per frame
-
+   
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -16,9 +17,9 @@ public class LoginManager : MonoBehaviour
     //사용자 계정을 새로 저장하거나(회원가입), 저장된 데이터를 읽어
     //사용자 입력과 일치하는자 검사(로그인)한다.
 
-    public TMP_InputField IDInputfield;
-    public TMP_InputField PasswordInputfield;
-    public TextMeshProUGUI NotifyTextUI;
+    public TMP_InputField IDInputfield; // 아이디 입력창
+    public TMP_InputField PasswordInputfield; //비밀번호 입력창
+    public TextMeshProUGUI NotifyTextUI; //알림 텍스트
 
     private void Start()
     {
@@ -62,19 +63,23 @@ public class LoginManager : MonoBehaviour
             return;
         }
 
-        //1.없는 아이디                 -> "아이디를 입력해 주세요"
+       
         if (PlayerPrefs.HasKey(id))
-           {
+        { 
+            //1.없는 아이디                 -> "아이디를 입력해 주세요"
             NotifyTextUI.text = " 아이디와 비밀번호를 확인해주세요";
             
             }
-        else if(PasswordInputfield.text == string.Empty)
+        else if(PlayerPrefs.GetString(id) != pw)
         {
-            NotifyTextUI.text = "입력하신 아이디와 패스워드가 일치하지 않습니다.";
+            //2. 틀린 비밀번호               -> "비밀번호를 확인해주세요"
+            NotifyTextUI.text = "아이디와 비밀번호를 확인해주세요.";
         }
-        //2. 틀린 비밀번호               -> "비밀번호를 확인해주세요"
-        //3. 로그인 성공                 -> 메인 씬으로 이동
-        SceneManager.LoadScene((int)SceneNames.Main);
+      else
+        {
+            //3. 로그인 성공                 -> 메인 씬으로 이동
+            SceneManager.LoadScene((int)SceneNames.Main);
+        } 
     }     
 }
 

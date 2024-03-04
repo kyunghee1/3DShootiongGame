@@ -29,7 +29,12 @@ public class TPSCamera : MonoBehaviour
     public float a;
     private void LateUpdate()
     {
-        transform.position = Target.position + Offset;
+        if(GameManager.Instance.State != GameState.Go)
+        {
+            return;
+        }
+
+        transform.localPosition = Target.position + Offset;
         transform.LookAt(Target);
 
         Vector2 xy = CameraManager.Instance.XY;

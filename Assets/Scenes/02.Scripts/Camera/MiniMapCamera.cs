@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class MiniMapCamera : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class MiniMapCamera : MonoBehaviour
     public float YDistance = 20f;
 
     private Vector3 _initialEulerAngles;
-    Camera cam;
+ 
         
     void Start()
     {
@@ -20,7 +21,7 @@ public class MiniMapCamera : MonoBehaviour
     void LateUpdate()
     {
         Vector3 targetPosition = Target.position;
-        targetPosition.y = YDistance;
+        targetPosition.y += YDistance;
 
         transform.position = targetPosition;
 

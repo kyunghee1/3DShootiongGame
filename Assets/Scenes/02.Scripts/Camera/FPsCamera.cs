@@ -39,7 +39,11 @@ public class FPSCamera : MonoBehaviour
       
     private void LateUpdate()
         {
-            transform.position = Target.position;
+        if(GameManager.Instance.State != GameState.Go)
+        {
+            return;
+        }
+            transform.localPosition = Target.position;
 
             Vector2 xy = CameraManager.Instance.XY;
             transform.eulerAngles = new Vector3(-xy.y, xy.x, 0);

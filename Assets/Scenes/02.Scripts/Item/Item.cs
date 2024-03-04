@@ -19,9 +19,9 @@ public class Item
     public int Count;
 
 
-    public Item(ItemType itemTypem, int count)
+    public Item(ItemType itemType, int count)
     {
-        ItemType = itemTypem;
+        ItemType = itemType;
         Count = count;
     }
     public bool TryUse()
@@ -59,18 +59,6 @@ public class Item
         }
         return true;
     }
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-
-
-    }
 }
 

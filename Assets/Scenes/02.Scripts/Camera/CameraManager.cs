@@ -24,7 +24,7 @@ public class CameraManager : MonoBehaviour
         {
             if (Cursor.lockState != CursorLockMode.Locked)
             {
-                return false;
+               // return false;
             }
 
             Vector3 mousePosition = Input.mousePosition;
@@ -74,7 +74,7 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        /*if (GameManager.Instance.State != GameState.Go)
+        if (GameManager.Instance.State != GameState.Go)
         {
             return;
         }
@@ -82,7 +82,7 @@ public class CameraManager : MonoBehaviour
         {
             if (Cursor.lockState == CursorLockMode.None)
             {
-                Cursor.lockState = CursorLockMode.Locked;
+             //   Cursor.lockState = CursorLockMode.Locked;
             }
         }
 
@@ -90,13 +90,13 @@ public class CameraManager : MonoBehaviour
         {
             if (Cursor.lockState == CursorLockMode.Locked)
             {
-                Cursor.lockState = CursorLockMode.None;
+              //  Cursor.lockState = CursorLockMode.None;
             }
             else
             {
-                Cursor.lockState = CursorLockMode.Locked;
+               // Cursor.lockState = CursorLockMode.Locked;
             }
-        }*/
+        }
 
         if (Input.GetKeyDown(KeyCode.Minus))
         {

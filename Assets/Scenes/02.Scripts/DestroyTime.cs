@@ -14,7 +14,22 @@ public class DestroyTime : MonoBehaviour
     public float DeleteTime = 1.5f; // 경과 시간을 측정하기 위한 타이머
     private float _timer = 0;
 
-   
+    public void Init()
+    {
+        _timer = 0f;
+    }
+
+    private void OnEnable()
+    {
+
+    }
+
+    private void OnDisable()
+    {
+        Init();
+    }
+
+
     private void Update()
     {
         

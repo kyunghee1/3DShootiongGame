@@ -23,10 +23,6 @@ public class CameraShake : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.State != GameState.Go)
-        {
-            return;
-        }
         if (!_isShaking)
         {
             return;

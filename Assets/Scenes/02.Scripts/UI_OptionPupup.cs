@@ -23,16 +23,6 @@ public class UI_OptionPopup : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-
-    public void OnClickContinueButton()
-    {
-        Debug.Log("계속하기");
-
-        GameManager.Instance.Continue();
-
-        Close();
-    }
-
     public void OnClickResumeButton()
     {
         //씬매니저야.(현재 열려 있는 씬)로드해라
@@ -40,15 +30,16 @@ public class UI_OptionPopup : MonoBehaviour
         SceneManager.LoadScene(currentSceneIndex);
         Debug.Log("다시하기");
     }
-
     public void OnClickExitButton()
     {
         Debug.Log("게임종료");
-        //빌드 후 실행했을 경우 종료하는 방법
+
+        // 빌드 후 실행했을 경우 종료하는 방법
         Application.Quit();
+
 #if UNITY_EDITOR
-        //유니티 에디터에서 실행했을 경우 종료하는 방법
+        // 유니티 에디터에서 실행했을 경우 종료하는 방법
         UnityEditor.EditorApplication.isPlaying = false;
-#endif
+#endif        
     }
 }

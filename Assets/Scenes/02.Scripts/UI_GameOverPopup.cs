@@ -3,13 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UI_GameOver : MonoBehaviour
+public class UI_GameOverPopup : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void Open()
     {
-        
+        // 사운드 효과음이라던지
+        // 초기화 함수
+        gameObject.SetActive(true);
     }
+
+    public void Close()
+    {
+        // 사운드 효과음이라던지...
+        // 여러 가지
+        gameObject.SetActive(false);
+    }
+
+    private void Awake()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void OnClickResumeButton()
     {
         //씬매니저야.(현재 열려 있는 씬)로드해라
