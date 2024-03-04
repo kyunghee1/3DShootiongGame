@@ -9,6 +9,7 @@ public enum GameState
 {
     Ready, // 준비
     Go, // 시작
+    Pause,  // 일시정지
     Over,  // 오버
 }
 public class GameManager : MonoBehaviour
@@ -22,6 +23,9 @@ public class GameManager : MonoBehaviour
 
     public Color GoStateColor;
 
+    public UI_OptionPopup OptionUI;
+
+
     private void Awake()
     {
         Instance = this;
@@ -29,6 +33,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+
+        Time.timeScale = 1f;
+
         StartCoroutine(Start_Coroutine());
     }
 
@@ -59,7 +66,25 @@ public class GameManager : MonoBehaviour
         Refresh();
     }
 
+    public void Pause()
+    {
+        State = GameState.Pause;
+        Time.timeScale = 0f;
+    }
+    public void Continue()
+    {
+        State = GameState.Go;
+        Time.timeScale = 1f;
+    }
 
+    public void OnOptionButtonClicked()
+    {
+        Debug.Log("옵션 버튼 클릭");
+
+        Pause();
+
+        OptionUI.Open();
+    }
 
 
     public void Refresh()
