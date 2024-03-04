@@ -66,15 +66,15 @@ public class CameraManager : MonoBehaviour
     private void Start()
     {
         // 마우스 커서 없애고, 고정
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+       /* Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;*/
 
         SetCameraMode(CameraMode.TPS);
     }
 
     private void Update()
     {
-        if (GameManager.Instance.State != GameState.Go)
+        /*if (GameManager.Instance.State != GameState.Go)
         {
             return;
         }
@@ -96,7 +96,7 @@ public class CameraManager : MonoBehaviour
             {
                 Cursor.lockState = CursorLockMode.Locked;
             }
-        }
+        }*/
 
         if (Input.GetKeyDown(KeyCode.Minus))
         {

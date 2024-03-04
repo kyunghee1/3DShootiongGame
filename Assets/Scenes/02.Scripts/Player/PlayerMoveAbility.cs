@@ -101,6 +101,8 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
      
         if (Health <= 0)
         {
+            StopAllCoroutines();
+          
             HealthSliderUI.value = 0f;
             gameObject.SetActive(false);
 
