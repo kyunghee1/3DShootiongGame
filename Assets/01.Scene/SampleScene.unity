@@ -7171,6 +7171,7 @@ MonoBehaviour:
   StateTextUI: {fileID: 1115845504}
   GoStateColor: {r: 1, g: 0, b: 0, a: 1}
   OptionUI: {fileID: 381327772}
+  GameOverUI: {fileID: 0}
 --- !u!4 &1601819139
 Transform:
   m_ObjectHideFlags: 0
@@ -9505,7 +9506,7 @@ PrefabInstance:
     - target: {fileID: 3179856559172593620, guid: bd1ff73f5cf17dd479672ae6ee872cf9, type: 3}
       propertyPath: HitEffectImageUI
       value: 
-      objectReference: {fileID: 354067989}
+      objectReference: {fileID: 354067991}
     - target: {fileID: 3189268952369651712, guid: bd1ff73f5cf17dd479672ae6ee872cf9, type: 3}
       propertyPath: m_Name
       value: Player

@@ -33,6 +33,7 @@ public class LoginManager : MonoBehaviour
     {
         string id = IDInputfield.text;
         string pw = PasswordInputfield.text;
+        //0. 아이디 또는 비밀번호를 입력하지 않은 경우
         if (id == string.Empty || pw == string.Empty)
         {
             NotifyTextUI.text = " 아이디와 비밀번호를 정확하게 입력해주세요";
@@ -54,17 +55,16 @@ public class LoginManager : MonoBehaviour
     }
     public void OnClickLoginButton()
     {
-        //0. 아이디 또는 비밀번호 입력 X -> "아이디와 비밀번호를 입력해주세요."
+        
         string id = IDInputfield.text;
         string pw = PasswordInputfield.text;
+        //0. 아이디 또는 비밀번호 입력 X -> "아이디와 비밀번호를 입력해주세요."
         if (id == string.Empty || pw == string.Empty)
         {
             NotifyTextUI.text = " 아이디와 비밀번호를 정확하게 입력해주세요";
             return;
         }
-
-       
-        if (PlayerPrefs.HasKey(id))
+        if (!PlayerPrefs.HasKey(id))
         { 
             //1.없는 아이디                 -> "아이디를 입력해 주세요"
             NotifyTextUI.text = " 아이디와 비밀번호를 확인해주세요";

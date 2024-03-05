@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 public enum MonsterState // 몬스터의 상태
 {
-    Any,            //어떤 상태라도
+    
     Idle,           // 대기
     Patrol,         // 순찰
     Trace,          // 추적
@@ -53,7 +53,7 @@ public class Monster : MonoBehaviour, IHitable
 
     private MonsterState _currentState = MonsterState.Idle;
     private Animator _animator;
-    public GameObject BloodPrefab;
+   
    
     private void Start()
     {
@@ -158,6 +158,7 @@ public class Monster : MonoBehaviour, IHitable
         //_characterController.Move(dir * MoveSpeed * Time.deltaTime);
         //내비게이션이 접근하는 최소 거리를 공격 가능 거리로 설정
         _navMeshAgent.stoppingDistance = AttackDistance;
+        //내비게이션의 목적지를 플레이어의 위치로 한다.
         _navMeshAgent.destination = _target.position;
         // 3. 쳐다본다.
        // transform.forward = dir; //(_target);
@@ -209,11 +210,13 @@ public class Monster : MonoBehaviour, IHitable
         // 2. 이동한다.
         //_characterController.Move(dir * MoveSpeed * Time.deltaTime);
         // 3. 쳐다본다.
+        //내비게이션이 접근하는 최소 거리를 오차 범위
         _navMeshAgent.stoppingDistance = TOLERANCE;
+        //내비게이션의 목적지를 플레이어의 위치를 한다.
         _navMeshAgent.destination =StartPosition;
         //transform.forward = dir; //(_target);
 
-        if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance >= TOLERANCE)
+        if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= TOLERANCE)
         {
             Debug.Log("상태 전환: Comeback -> idle");
             _animator.SetTrigger("ComebackToIdle");
@@ -258,11 +261,6 @@ public class Monster : MonoBehaviour, IHitable
             Debug.Log("때렸다!");
             DamageInfo damageInfo = new DamageInfo(DamageType.Normal, Damage);
             playerHitable.Hit(damageInfo);
-            _attackTimer = 0f;
-
-
-
-
             _attackTimer = 0f;
         }
     }
@@ -313,9 +311,7 @@ public class Monster : MonoBehaviour, IHitable
 
         if(damage.DamageType == DamageType.Critical)
         {
-            GameObject bloodObject = Instantiate(BloodPrefab);
-            bloodObject.transform.position = damage.Position;
-            bloodObject.transform.forward = damage.Normal;
+            BloodFactory.Instance.Make(damage.Position, damage.Normal);
         }
         Health -= damage.Amount;
         if (Health <= 0)
@@ -329,7 +325,7 @@ public class Monster : MonoBehaviour, IHitable
         else
         {
             Debug.Log("상태 전환: Any -> Damaged");
-          
+            _animator.SetTrigger("Damaged");
             _currentState = MonsterState.Damaged;
         }
     }
@@ -354,13 +350,11 @@ public class Monster : MonoBehaviour, IHitable
     private Coroutine _dieCoroutine;
     private void Die()
     {
-       if(_dieCoroutine == null)
+        //매 프레임마다 해야 할 행동을 추가
+        if (_dieCoroutine == null)
         {
             _dieCoroutine = StartCoroutine(Die_Coroutine());
-        }
-        // 죽을때 아이템 생성
-      
-       
+        } 
     }
 
 

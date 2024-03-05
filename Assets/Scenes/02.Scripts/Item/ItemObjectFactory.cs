@@ -23,8 +23,8 @@ public class ItemObjectFactory : MonoBehaviour
   
    
     private int PoolCount = 10; //풀 크기
-    public List<ItemObject> _ItemPool = new List<ItemObject>();
-    public List<GameObject> ItemPrefabs;
+    public List<ItemObject> _ItemPool; //공장의 창고
+    public List<GameObject> ItemPrefabs; // (생성할) 아이템 프리팹들
 
     private void Awake()
     {
@@ -34,20 +34,20 @@ public class ItemObjectFactory : MonoBehaviour
         {
             foreach (GameObject prefab in ItemPrefabs) //3개
             {
+                //1.만들고
                 GameObject item = Instantiate(prefab);
+                //2. 창고에 넣는다.
                 item.transform.SetParent(this.transform);
 
-                _ItemPool.Add(gameObject.GetComponent<ItemObject>());
+                _ItemPool.Add(item.GetComponent<ItemObject>());
+                //3. 비활성화
 
                 item.SetActive(false);
             }
         }
 
     }
-    private void Start()
-    {
-        
-    }
+   
     private ItemObject Get(ItemType itemType) //창고 뒤지기
     {
         foreach(ItemObject itemObject in _ItemPool) //창고를 뒤진다
@@ -59,7 +59,7 @@ public class ItemObjectFactory : MonoBehaviour
         }
         return null;
     }
-   
+   //확률생성(공장아! 랜덤박스 주문할게!)
     public void MakePercent(Vector3 position)
     {
         int percentage = UnityEngine.Random.Range(0, 100);
@@ -76,13 +76,14 @@ public class ItemObjectFactory : MonoBehaviour
             Make(ItemType.Bullet, position);
         }
     }
+    //기본 생성(공장아! 내가 원하는거 주문할게!)
     public void Make(ItemType itemType, Vector3 position)
     {
        ItemObject itemObject = Get(itemType);
         if (itemObject != null)
         {
             itemObject.transform.position = position;
-            ///itemObject.Init();
+            itemObject.Init();
             itemObject.gameObject.SetActive(true);
         }
      }

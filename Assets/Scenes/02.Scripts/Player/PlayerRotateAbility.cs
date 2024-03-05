@@ -10,11 +10,6 @@ public class PlayerRotateAbility : MonoBehaviour
     public float RotationSpeed = 200;//초당 200 도까지 회전 가능한 속도
     //누적할 x 각도
     private float _mx =0;
-   
-
-   
-  
-
   
     void Update()
     {
@@ -37,7 +32,7 @@ public class PlayerRotateAbility : MonoBehaviour
         //Vector3 dir = new Vector3(-mouse_Y, mouse_X, 0);
 
         //3.누적한 값에 따라 회전한다.
-        transform.eulerAngles = new Vector3(x: 0f, y:_mx, z: 0);
+        transform.eulerAngles = new Vector3( 0f, _mx,  0);
         //transform.eulerAngles += dir * rotSpeed * Time.deltaTime;
     }
     public void ResetX()

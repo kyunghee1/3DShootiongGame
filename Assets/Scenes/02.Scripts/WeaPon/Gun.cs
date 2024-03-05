@@ -13,16 +13,15 @@ public enum GunType
 public class Gun : MonoBehaviour
 {
     public GunType Gtype;
+
     public int Damage = 10; //공격력
 
-    public float FireCooltime = 0.2f;
+    public float FireCooltime = 0.2f; //발사쿨타임
     //-총알 개수
     public int BulletRemainCount;
     public int BulletMaxCount = 30;
 
     public float ReloadTime = 1.5f;
-
-    private GunType[] guns;
 
     //대표이미지
     public Sprite ProfileImage;

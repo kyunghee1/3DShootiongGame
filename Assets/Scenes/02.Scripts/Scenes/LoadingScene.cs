@@ -11,11 +11,10 @@ public class LoadingScene : MonoBehaviour
 {
     public SceneNames NextScene;
     public Slider LoadingSliderUI;
-    public TextMesh LoadingTextUI;
+    public TextMeshProUGUI LoadingTextUI;
     // Start is called before the first frame update
     void Start()
     {
-        
      StartCoroutine(LoadNextScene_Coroutine()); 
     }
     public  IEnumerator LoadNextScene_Coroutine()
@@ -46,6 +45,7 @@ public class LoadingScene : MonoBehaviour
             {
                 ao.allowSceneActivation |= true;
             }
+            //다음 프레임까지 쉰다.
             yield return null;
         }
 

@@ -1,5 +1,5 @@
 using System;
-
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Bomb : MonoBehaviour
@@ -27,15 +27,15 @@ public class Bomb : MonoBehaviour
     //1. 터질 때
     // 실습 관제 8. 수류탄이 폭발할 때(사라질 때 ) 폭발 이펙트를 자기 위치에 생성하기
     void OnCollisionEnter(Collision other)
-    {
+    {//1. 터질때
 
         gameObject.SetActive(false); // 창고에 넣는다.
 
-        GameObject Effect = Instantiate(BombEffectPrefab);
-        Effect.transform.position = this.gameObject.transform.position;
+        GameObject effect = Instantiate(BombEffectPrefab);
+        effect.transform.position = this.gameObject.transform.position;
 
         //2. 범위안에 있는 모든 콜라이더를 찾는다.
-        int layer = LayerMask.GetMask("Monster") | LayerMask.NameToLayer("Player");
+        int layer =/* LayerMask.GetMask("Player") |*/ LayerMask.GetMask("Monster");
         int count = Physics.OverlapSphereNonAlloc(transform.position, ExplsionRadius, _collidedrs ,layer); //| 비트합 연산자//LayerMask. 1 << 8, 1<<9
         //-> 피직스.오버랩 함수는 특정 영역(radius)안에 있는 특정 레이어들의 게임 오브젝트의
         //콜라이더 컴포넌트들을 모두 찾아 배열로 반환하는 함수
@@ -54,7 +54,7 @@ public class Bomb : MonoBehaviour
             }
            
         }
-        //4. Hit()한다.
+    
 
 
 

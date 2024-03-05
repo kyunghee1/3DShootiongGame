@@ -11,7 +11,7 @@ public class MonsterAttackEvent : MonoBehaviour
     {
         _owner = GetComponentInParent<Monster>();
     }
-    public void AttackEvnent()
+    public void AttackEvent()
     {
         Debug.Log("어택 발생");
         _owner.PlayerAttack();

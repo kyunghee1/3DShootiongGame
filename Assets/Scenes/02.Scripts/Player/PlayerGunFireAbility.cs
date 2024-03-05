@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class PlayerGunFireAbility : MonoBehaviour
 {
-    private int _currentGunIndex;
+    private int _currentGunIndex; //현재 들고 있는 총의 순서
     public Gun CurrentGun; //현재 들고 있는 총
 
     //목표: 마우스 왼쪽 버튼을 누르면 시선이 바라보는 방향으로 총을 발사하고 싶다.
@@ -20,7 +20,7 @@ public class PlayerGunFireAbility : MonoBehaviour
     private float _progress;
     private float Duration = 0.2f;
 
-    public List<Gun> GunInventory;
+    public List<Gun> GunInventory; //총을 담는 인벤토리
 
 
     //장전코루틴
@@ -30,11 +30,12 @@ public class PlayerGunFireAbility : MonoBehaviour
 
     private const int DefaultFOV = 60;
     private const int ZoomFOV = 20;
-    private bool _isZoomMode = false;
+    private bool _isZoomMode = false; //줌모드냐?
 
     private const float ZoomInDuration = 0.3f;
     private const float ZoomOutDuration = 0.2f;
-    private float _zoomProgress;
+    private float _zoomProgress; // 0 ~1
+    
 
     public GameObject CrosshairUI;
     public GameObject CrosshairZoomUI;
@@ -42,9 +43,7 @@ public class PlayerGunFireAbility : MonoBehaviour
     //-총알 개수 텍스트 UI
     public Text BulletTextUI;
 
-   
-
-    public Image GunImageUI;
+    public Image GunImageUI; //무기 이미지 UI
 
     private Animator _animator;
 
@@ -78,7 +77,7 @@ public class PlayerGunFireAbility : MonoBehaviour
     public void RefreshUI()
     {
         GunImageUI.sprite = CurrentGun.ProfileImage;
-        BulletTextUI.text = $"{CurrentGun.BulletRemainCount:D2}/{CurrentGun.BulletMaxCount}";
+        BulletTextUI.text = $"{CurrentGun.BulletRemainCount:d2}/{CurrentGun.BulletMaxCount}";
 
         CrosshairUI.SetActive(!_isZoomMode);
         CrosshairZoomUI.SetActive(_isZoomMode);
@@ -99,11 +98,9 @@ public class PlayerGunFireAbility : MonoBehaviour
     //줌 모드에 따라 카메라 FOV 수정해주는 메서드
     private void RefreshZoomMode()
     {
-        _progress += Time.deltaTime / Duration;
         if (!_isZoomMode)
         {
-            Camera.main.fieldOfView = DefaultFOV;
-            
+            Camera.main.fieldOfView = DefaultFOV;  
         }
         else
         {
@@ -213,7 +210,6 @@ public class PlayerGunFireAbility : MonoBehaviour
             if (!_isReloading)
             {
                 StartCoroutine(Reload_Coroutine());
-                _isReloading = false;
             }
         }
         ReloadTextObject.SetActive(_isReloading);
@@ -221,7 +217,7 @@ public class PlayerGunFireAbility : MonoBehaviour
         _timer += Time.deltaTime;
 
         //구현순서
-        //1. 만약에 마우스 왼쪽 버튼을 누르면 
+        //1. 만약에 마우스 왼쪽 버튼을 누른 상태 && 쿨타임이 다 지난 상태 && 총알 개수>0
         if (Input.GetMouseButton(0) && _timer >= CurrentGun.FireCooltime && CurrentGun.BulletRemainCount > 0)
         {
             if (_isReloading)
@@ -231,14 +227,12 @@ public class PlayerGunFireAbility : MonoBehaviour
                 _isReloading = false;
 
             }
-            _animator.SetTrigger("Shot");
+          
             CurrentGun.BulletRemainCount -= 1;
             RefreshUI();
             _timer = 0;
 
-            //총 이펙트 중 하나를 켜준다.
-            //0.1초후..
-            //꺼준다
+            StartCoroutine(MuzzleEffectOn_Coroutine());
 
             //2. 레이(광선)을 생성하고, 위치와 방향을 설정한다.
             Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
@@ -256,7 +250,7 @@ public class PlayerGunFireAbility : MonoBehaviour
                     damageInfo.Position = hitInfo.point;
                     damageInfo.Normal = hitInfo.normal;
 
-                    if(Random.Range(0,5) ==0)
+                    if(Random.Range(0,2) ==0)
                     {
                         Debug.Log("크리티컬!");
                         damageInfo.DamageType = DamageType.Critical;
@@ -279,6 +273,18 @@ public class PlayerGunFireAbility : MonoBehaviour
                 HitEffect.Play();
             }
         }
+    }
+    private IEnumerator MuzzleEffectOn_Coroutine()
+    {
+        //총 이펙트 중 하나를 켜준다.
+        int randomIndex = Random.Range(0, MuzzleEffects.Count);
+        MuzzleEffects[randomIndex].SetActive(true);
+
+        //0.1초후....
+        yield return new WaitForSeconds(0.1f);
+
+        //꺼준다.
+        MuzzleEffects[randomIndex].SetActive(false);
     }
     private void RefreshGun()
     {

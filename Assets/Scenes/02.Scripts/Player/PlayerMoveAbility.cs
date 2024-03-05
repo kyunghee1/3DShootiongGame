@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,16 +18,16 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
     public float StaminaConsumeSpeed = 33f; // 초당 스태미나 소모량
     public float StaminaChargeSpeed = 50f;  // 초당 스태미나 충전량
 
-    [Header("체력 슬라이더 UI")]
-    public GameObject HitEffectImageUI;
+
+    [Header("스태미나 슬라이더 UI")]
+    public Slider StaminaSliderUI;
+
+    public Image HitEffectImageUI;
 
 
     public int Health;// 플레이어 체력 변수
     public int Maxhealth = 100; //체력 변수
     public Slider HealthSliderUI;
-
-    [Header("스태미나 슬라이더 UI")]
-    public Slider StaminaSliderUI;
 
     private CharacterController _characterController;
     private Animator _animator;
@@ -69,8 +68,6 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
     {
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponentInChildren<Animator>();
-            
-
     }
 
     private void Start()
@@ -102,6 +99,7 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
         if (Health <= 0)
         {
             StopAllCoroutines();
+            HitEffectImageUI.gameObject.SetActive(true);
           
             HealthSliderUI.value = 0f;
             gameObject.SetActive(false);
@@ -127,11 +125,6 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
             return;
         }
         HealthSliderUI.value = (float)Health / (float)Maxhealth;  // 0 ~ 1
-
-        if (GameManager.Instance.State != GameState.Go)
-        {
-            return;
-        }
         //구현순서
         //1. 만약 벽에 닿아 있는데 
         if (Stamina > 0 && _characterController.collisionFlags == CollisionFlags.Sides)
@@ -141,7 +134,7 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
             {
                 //3. 벽을 타겠다.
                 _isClimbing = true;
-                _yVelocity = ClimbingPower * StaminaConsumeSpeed;
+                _yVelocity = ClimbingPower;
             }
         }
         if (Input.GetKeyDown(KeyCode.Alpha9))
@@ -159,8 +152,8 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
         float v = Input.GetAxis("Vertical");
 
         // 2. '캐릭터가 바라보는 방향'을 기준으로 방향구하기
-        Vector3 dir = new Vector3(h, 0, v);
-        Vector3 unNormalizedDir = dir;// 로컬 좌표꼐 (나만의 동서남북) 
+        Vector3 dir = new Vector3(h, 0, v);// 로컬 좌표꼐 (나만의 동서남북) 
+        Vector3 unNormalizedDir = dir;
         dir.Normalize();
         // Transforms direction from local space to world space.
         dir = Camera.main.transform.TransformDirection(dir); // 글로벌 좌표계 (세상의 동서남북)
@@ -190,15 +183,13 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
         }
         Stamina = Mathf.Clamp(Stamina, 0, 100);
         StaminaSliderUI.value = Stamina / MaxStamina;  // 0 ~ 1;//
-
-        Health = Mathf.Clamp(Health, 0, 100);
-        HealthSliderUI.value = (float)Health / (float)Maxhealth;
         // 땅에 닿아을때 
         if (_characterController.isGrounded)
         {
             if (_yVelocity < -20)
             {
                 DamageInfo damageInfo = new DamageInfo(DamageType.Normal, 10 * (int)(_yVelocity / -10f));
+                Hit(damageInfo);
             }
             _isJumping = false;
             _isClimbing = false;
@@ -207,7 +198,7 @@ public class PlayerMoveAbility : MonoBehaviour, IHitable
         }
         // 점프 구현
         // 1. 만약에 [Spacebar] 버튼을 누르는 순간 && 땅이거나 or 점 프 횟수가 남아있다면
-        if (Input.GetKeyDown(KeyCode.Space) && (_characterController.isGrounded || JumpRemainCount > 0))
+        if (Input.GetKeyDown(KeyCode.Space) && (_characterController.isGrounded || (JumpRemainCount > 0)))
         {
             _isJumping = true;
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 
 public enum ItemState
+
 {
     Idle,  // 대기 상태     (플레이어와의 거리를 체크한다.)
            // ▼ (if 충분히 가까워 지면..)

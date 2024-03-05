@@ -23,6 +23,14 @@ public class UI_OptionPopup : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+    public void OnClidkContinueButton()
+    {
+        Debug.Log("계속하기");
+
+        GameManager.Instance.Continue();
+
+        Close();
+    }
     public void OnClickResumeButton()
     {
         //씬매니저야.(현재 열려 있는 씬)로드해라

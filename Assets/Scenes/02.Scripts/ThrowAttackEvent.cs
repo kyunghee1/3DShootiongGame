@@ -11,9 +11,9 @@ public class ThrowAttackEvent : MonoBehaviour
     {
         _owner = GetComponentInParent<PlayerBombFireAbility>();
     }
-    public void AttackEvnent()
+    public void AttackEvent()
     {
-        _owner.BombFire();
+        _owner = null;
     }
    
     

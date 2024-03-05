@@ -14,14 +14,15 @@ public class PlayerItemUseAbility : MonoBehaviour
         {
             return;
         }
+        //실습과제 31. T/Y/U 버튼 누르면 아이템 사용 구현
         if (Input.GetKeyDown(KeyCode.T))
         {
+            // 체력 아이템 사용
            bool result = ItemManager.Instance.TryUseItem(ItemType.Health);
             if(result)
             {
                 //todo :아이템 효과음 재생
-                //todo: 파티클 시스템 재생
-               
+                //todo: 파티클 시스템 재생  
             }
             else
             {
